@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zabbix-mysql-server
+  namespace: zbx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zabbix-mysql-server
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: zabbix-mysql-server
+    spec:
+      containers:
+        - name: zabbix-mysql-server
+          image: mysql:5.7
+          imagePullPolicy: Always
+          env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-user-pwd
+                key: mysql-root-pwd
+          ports:
+          - containerPort: 3306
+          volumeMounts:
+          - name: mysql-volume
+            mountPath: /var/lib/mysql
+
+      volumes:
+      - name: timezone
+        hostPath:
+          path: /usr/share/zoneinfo/Asia/Seoul
+      - name: mysql-volume
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim

@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-service
+  namespace: zbx
+spec:
+  ports:
+  - port: 30004
+    protocol: TCP
+    targetPort: 30004
+    nodePort: 30004
+    name: http-grafana
+#  - port: 8081
+#    protocol: TCP
+#    targetPort: 8081
+#    name: grafana-render
+#  - port: 587
+#    protocol: TCP
+#    targetPort: 587
+#    nodePort: 30587
+#    name: smtp-grafana
+  selector:
+    app: grafana
+  type: NodePort

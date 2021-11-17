@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: react-pv
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: 192.168.16.142
+    path: /nfs/build
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: react-pvc-claim
+  namespace: zbx
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+

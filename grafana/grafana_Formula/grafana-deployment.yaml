@@ -1,0 +1,60 @@
+---
+apiVersion: v1
+data:
+  GF_RENDERING_CALLBACK_URL: http://grafana-service:30004/
+  GF_RENDERING_SERVER_URL: http://grafana-image-renderer:8081/render
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: grafana-image-renderer
+  namespace: zbx
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: grafana
+  name: grafana
+  namespace: zbx
+spec:
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      securityContext:
+        fsGroup: 472
+        supplementalGroups:
+          - 0
+      containers:
+      - name: grafana
+        image: grafana/grafana:8.2.0
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 30004
+            name: http-grafana
+            protocol: TCP
+        envFrom:
+        - configMapRef:
+            name: grafana-image-renderer
+        volumeMounts:
+          - mountPath: /var/lib/grafana
+            name: grafana-pv
+          - mountPath: /usr/share/grafana
+            name: grafana-pv-home
+          - mountPath: /etc/grafana
+            name: grafana-pv-ini
+      volumes:
+        - name: grafana-pv
+          persistentVolumeClaim:
+            claimName: grafana-pvc-claim
+        - name: grafana-pv-home
+          persistentVolumeClaim:
+            claimName: grafana-pvc-claim-home
+        - name: grafana-pv-ini
+          persistentVolumeClaim:
+            claimName: grafana-pvc-claim-ini
+

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-image-renderer
+  namespace: zbx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana-image-renderer
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: grafana-image-renderer
+    spec:
+      containers:
+      - image: grafana/grafana-image-renderer
+        name: grafana-image-renderer
+        env:
+        - name: IGNORE_HTTPS_ERRORS
+          value: "true"
+        ports:
+        - containerPort: 8081
+          name: http
+          protocol: TCP

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-image-renderer
+  namespace: zbx
+spec:
+  ports:
+  - name: grafana-image-renderer
+    port: 8081
+    protocol: TCP
+    targetPort: http
+    nodePort: 30081
+  selector:
+    app: grafana-image-renderer
+  sessionAffinity: None
+  type: NodePort
+

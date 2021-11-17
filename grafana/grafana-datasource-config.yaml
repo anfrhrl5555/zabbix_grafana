@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasources
+  namespace: zbx
+data:
+  prometheus.yaml: |-
+    {
+        "apiVersion": 1,
+        "datasources": [
+            {
+                "access": "proxy",
+                "editable": true,
+                "name": "prometheus",
+                "orgId": 1,
+                "type": "prometheus",
+                "url": "http://prometheus-service.monitoring.svc:8080",
+                "version": 1
+            }
+        ]
+    }
+#  zabbix.yaml: |-
+#    {
+#        "apiVersion": 1,
+#        "datasources": [
+#            {
+#                "access": "Server",
+#                "editable": true,
+#                "name": "zabbix",
+#                "orgId": 2,
+#                "type": "zabbix",
+#                "url": "http://192.168.16.142:30080",
+#                "version": 1
+#            }
+#        ]
+#    }
